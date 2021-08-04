@@ -56,7 +56,7 @@ trait BigQueryJobBase extends StrictLogging {
   val bigquery: BigQuery = BigQueryOptions.getDefaultInstance.getService
 
   val tableId: TableId = BigQueryJobBase.extractProjectDatasetAndTable(
-    cliConfig.outputDataset + "." + cliConfig.outputTable
+    projectId + ":" + cliConfig.outputDataset + "." + cliConfig.outputTable
   )
 
   val datasetId: DatasetId = {
@@ -68,13 +68,13 @@ trait BigQueryJobBase extends StrictLogging {
     }
   }
 
-  val bqTable = s"${cliConfig.outputDataset}.${cliConfig.outputTable}"
+  val bqTable = s"${projectId}:${cliConfig.outputDataset}.${cliConfig.outputTable}"
 
   def getOrCreateDataset(): Dataset = {
     val dataset = scala.Option(bigquery.getDataset(datasetId))
     dataset.getOrElse {
       val datasetInfo = DatasetInfo
-        .newBuilder(cliConfig.outputDataset)
+        .newBuilder(projectId, cliConfig.outputDataset)
         .setLocation(cliConfig.getLocation())
         .build
       bigquery.create(datasetInfo)

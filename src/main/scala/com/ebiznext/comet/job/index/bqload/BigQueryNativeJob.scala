@@ -22,7 +22,7 @@ class BigQueryNativeJob(
 
   override def name: String = s"bqload-${cliConfig.outputDataset}-${cliConfig.outputTable}"
 
-  override val projectId: String = ServiceOptions.getDefaultProjectId
+  override lazy val projectId: String = ServiceOptions.getDefaultProjectId
 
   logger.info(s"BigQuery Config $cliConfig")
 

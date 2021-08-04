@@ -921,7 +921,8 @@ trait IngestionJob extends SparkJob {
             .getFields
             .size() == withScriptFieldsDF.schema.fields.length
         ) {
-          val bqTable = s"${domain.name}.${schema.name}"
+          val projectId = session.conf.get("fs.gs.project.id")
+          val bqTable = s"${projectId}:${domain.name}.${schema.name}"
           (mergeOptions.queryFilter, metadata.sink) match {
             case (Some(query), Some(BigQuerySink(_, _, Some(_), _, _, _, _))) =>
               val queryArgs = query.richFormat(options)

@@ -33,10 +33,10 @@ class BigQuerySparkJob(
 
   override def name: String = s"bqload-${cliConfig.outputDataset}-${cliConfig.outputTable}"
 
-  val conf: Configuration = session.sparkContext.hadoopConfiguration
+  lazy val conf: Configuration = session.sparkContext.hadoopConfiguration
   logger.info(s"BigQuery Config $cliConfig")
 
-  override val projectId: String = conf.get("fs.gs.project.id")
+  override lazy val projectId: String = conf.get("fs.gs.project.id")
 
   val bucket: String = conf.get("fs.defaultFS")
 
